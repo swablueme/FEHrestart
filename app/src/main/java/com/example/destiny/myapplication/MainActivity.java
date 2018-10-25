@@ -2,10 +2,9 @@
  * Copyright (c) 2017
  * https://github.com/Neffez
  */
-
-package neffez.de.fehrestart;
-
+package com.example.destiny.myapplication;
 import android.app.ActivityManager;
+
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.Toast;
@@ -15,9 +14,10 @@ import java.io.DataOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Date;
+import java.text.SimpleDateFormat;
 
 public class MainActivity extends AppCompatActivity {
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,6 +46,11 @@ public class MainActivity extends AppCompatActivity {
     private boolean deleteXml() throws Exception {
         final Process su = Runtime.getRuntime().exec("su");
         final DataOutputStream outputStream = new DataOutputStream(su.getOutputStream());
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy_MM_dd_HH_mm_ss");
+        Date now = new Date();
+        String fileName = formatter.format(now) + ".xml";
+        outputStream.writeBytes("cp /data/data/com.nintendo.zaba/shared_prefs/deviceAccount:.xml " + "/data/data/com.nintendo.zaba/shared_prefs/" + fileName + "\n");
+        Toast.makeText(this, "cp /data/data/com.nintendo.zaba/shared_prefs/deviceAccount:.xml " + "/data/data/com.nintendo.zaba/shared_prefs/" + fileName, Toast.LENGTH_LONG);
         outputStream.writeBytes("rm /data/data/com.nintendo.zaba/shared_prefs/deviceAccount:.xml\n");
         outputStream.flush();
         outputStream.writeBytes("exit\n");
